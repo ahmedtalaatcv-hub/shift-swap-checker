@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Shift Swap Pro</title>
+
+<style>
+body {
+  font-family: Arial;
+  margin:0;
+  background: linear-gradient(135deg,#5f6caf,#9b59b6);
+}
+
+.container {
+  max-width:420px;
+  margin:auto;
+  padding:15px;
+}
+
+.step {
+  animation: fade 0.3s ease;
+}
+
+@keyframes fade {
+  from {opacity:0; transform:translateX(20px);}
+  to {opacity:1; transform:translateX(0);}
+}
+
+h2 {
+  text-align:center;
+  color:white;
+}
+
+.grid {
+  display:flex;
+  gap:15px;
+}
+
+.card {
+  background:#ffffff;
+  border-radius:18px;
+  padding:18px;
+  flex:1;
+  box-shadow:0 10px 25px rgba(0,0,0,0.08);
+  border:1px solid rgba(0,0,0,0.04);
+  transition:0.3s;
+}
+
+.card:hover {
+  transform:translateY(-3px);
+  box-shadow:0 15px 30px rgba(0,0,0,0.12);
+}
+
+.section {
+  background:#f8f9ff;
+  padding:12px;
+  border-radius:12px;
+  margin-top:10px;
+  border:1px solid #eef0ff;
+}
+
+h3 {
+  color:#444;
+  margin-bottom:10px;
+}
+
+h4 {
+  font-size:14px;
+  color:#666;
+  margin-bottom:8px;
+}
+
+label {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:14px;
+  margin-top:8px;
+  color:#555;
+}
+
+input[type="checkbox"] {
+  accent-color:#6c5ce7;
+}
+
+
+
+.row {
+  display:flex;
+  gap:10px;
+  margin-bottom:8px;
+}
+
+/* INPUTS PRO STYLE */
+
+
+input, select {
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  border:2px solid #e0e0e0;
+  background:#f7f8ff;
+  font-size:15px;
+  transition: all 0.3s ease;
+}
+
+/* Hover */
+input:hover, select:hover {
+  border-color:#6c5ce7;
+  background:#fff;
+}
+
+/* Focus قوي */
+input:focus, select:focus {
+  outline:none;
+  border-color:#6c5ce7;
+  background:#fff;
+  box-shadow:0 0 0 4px rgba(108,92,231,0.2);
+  transform:scale(1.02);
+}
+/* صح */
+.valid {
+  border-color:#2ecc71 !important;
+  background:#eafaf1 !important;
+}
+
+/* غلط */
+.invalid {
+  border-color:#e74c3c !important;
+  background:#fdecea !important;
+}
+
+/* Placeholder */
+input::placeholder {
+  color:#aaa;
+}
+
+/* Disabled (لو احتجته بعدين) */
+input:disabled, select:disabled {
+  background:#eee;
+  cursor:not-allowed;
+}
+
+button {
+  width:100%;
+  padding:14px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.25s;
+}
+
+/* Validate */
+button[onclick="validate()"] {
+  background: linear-gradient(135deg,#2ecc71,#27ae60);
+}
+
+button[onclick="validate()"]:hover {
+  transform:scale(1.03);
+}
+
+/* Reset */
+button[onclick="resetForm()"] {
+  background: linear-gradient(135deg,#ff6b6b,#e74c3c);
+}
+
+.result {
+  margin-top:15px;
+  padding:15px;
+  border-radius:10px;
+}
+
+.ok {background:#d4edda;}
+.bad {background:#f8d7da;}
+
+@media(max-width:800px){
+  .grid {flex-direction:column;}
+}
+
+.result {
+  border-left: 6px solid;
+}
+
+.ok {
+  border-color: #2ecc71;
+  background: #eafaf1;
+}
+
+.bad {
+  border-color: #e74c3c;
+  background: #fdecea;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h2>Shift Swap Validation Tool</h2>
+
+<div class="grid">
+
+<div class="step" id="step1">
+
+<div class="card">
+<h3>Employee 1</h3>
+<input id="n1" placeholder="Name">
+
+<label><input type="checkbox" id="r1"> Ramadan (7h)</label>
+
+<div class="section">
+<h4>Current Week</h4>
+<div class="row">
+<select id="s1"></select>
+<select id="e1"></select>
+</div>
+
+<div class="row">
+<select id="off1a"></select>
+<select id="off1b"></select>
+</div>
+</div>
+
+<div class="section">
+<h4>Next Week</h4>
+<div class="row">
+<select id="s1n"></select>
+<select id="e1n"></select>
+</div>
+
+<div class="row">
+<select id="off1na"></select>
+<select id="off1nb"></select>
+</div>
+</div>
+
+</div>
+
+</div>
+<div class="step" id="step2" style="display:none;">
+
+<div class="card">
+<h3>Employee 2</h3>
+<input id="n2" placeholder="Name">
+
+<label><input type="checkbox" id="r2"> Ramadan (7h)</label>
+
+<div class="section">
+<h4>Current Week</h4>
+<div class="row">
+<select id="s2"></select>
+<select id="e2"></select>
+</div>
+
+<div class="row">
+<select id="off2a"></select>
+<select id="off2b"></select>
+</div>
+</div>
+
+<div class="section">
+<h4>Next Week</h4>
+<div class="row">
+<select id="s2n"></select>
+<select id="e2n"></select>
+</div>
+
+<div class="row">
+<select id="off2na"></select>
+<select id="off2nb"></select>
+</div>
+</div>
+
+</div>
+
+</div>
+
+<div style="display:flex; gap:10px; margin-top:15px;">
+  <button onclick="prevStep()">⬅ Back</button>
+  <button onclick="nextStep()">Next ➡</button>
+</div>
+
+<div class="step" id="step3" style="display:none;">
+  <div id="out"></div>
+</div>
+
+</div>
+
+<script>
+let currentStep = 1;
+
+function showStep(step){
+  document.querySelectorAll(".step").forEach(s=>s.style.display="none");
+  document.getElementById("step"+step).style.display="block";
+}
+
+function nextStep(){
+  if(currentStep < 3){
+    currentStep++;
+    showStep(currentStep);
+
+    if(currentStep === 3){
+      validate();
+    }
+  }
+}
+
+function prevStep(){
+  if(currentStep > 1){
+    currentStep--;
+    showStep(currentStep);
+  }
+}
+// ساعات
+function fillHours(id){
+  let el=document.getElementById(id);
+  for(let i=0;i<24;i++){
+    let o=document.createElement("option");
+    o.value=i;
+    o.text=formatTime(i); // 👈 AM PM
+    el.appendChild(o);
+  }
+}
+
+
+["s1","e1","s2","e2","s1n","e1n","s2n","e2n"].forEach(fillHours);
+
+// أيام
+let names=["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+
+function fillDays(id,offset){
+  let el=document.getElementById(id);
+  el.innerHTML='<option value="0">None</option>';
+  names.forEach((d,i)=>{
+    let o=document.createElement("option");
+    o.value=i+1+offset;
+    o.text=d;
+    el.appendChild(o);
+  });
+}
+
+["off1a","off1b","off2a","off2b"].forEach(id=>fillDays(id,0));
+["off1na","off1nb","off2na","off2nb"].forEach(id=>fillDays(id,7));
+
+// مدة الشفت
+function dur(s,e){
+  if(e<=s) e+=24;
+  return e-s;
+}
+
+// الراحة
+function rest(e,s){
+  if(s<=e) s+=24;
+  return s-e;
+}
+
+function resetForm(){
+  document.querySelectorAll("input,select").forEach(el=>{
+    if(el.type==="checkbox") el.checked=false;
+    else el.selectedIndex=0;
+  });
+  document.getElementById("out").innerHTML="";
+}
+
+
+// Employee 1
+autoEnd("s1","e1","r1");
+autoEnd("s1n","e1n","r1");
+
+// Employee 2
+autoEnd("s2","e2","r2");
+autoEnd("s2n","e2n","r2");
+
+// consecutive logic
+function maxConsecutive(offDays){
+  let working=[];
+  for(let i=1;i<=14;i++){
+    if(!offDays.includes(i)) working.push(i);
+  }
+
+  let max=1,cur=1;
+  for(let i=1;i<working.length;i++){
+    if(working[i]===working[i-1]+1){
+      cur++;
+      max=Math.max(max,cur);
+    } else cur=1;
+  }
+  return max;
+}
+function validate(){
+
+  function analyze(emp,name){
+    let s=+document.getElementById("s"+emp).value;
+    let e=+document.getElementById("e"+emp).value;
+    let sn=+document.getElementById("s"+emp+"n").value;
+    let en=+document.getElementById("e"+emp+"n").value;
+
+    let ram=document.getElementById("r"+emp).checked;
+
+    let off=[
+      +document.getElementById("off"+emp+"a").value,
+      +document.getElementById("off"+emp+"b").value,
+      +document.getElementById("off"+emp+"na").value,
+      +document.getElementById("off"+emp+"nb").value
+    ].filter(x=>x>0);
+
+    let errors=[];
+    let details=[];
+
+    // shift
+    let shiftOk = (dur(s,e)===(ram?7:9)) && (dur(sn,en)===(ram?7:9));
+    details.push(`${shiftOk?"✅":"❌"} Shift length correct`);
+
+    // rest
+    let r = rest(e,sn);
+    let exempt = off.includes(7)||off.includes(8);
+    let restOk = r>=12 || exempt;
+
+    details.push(`${restOk?"✅":"❌"} ${name}: ${r} hours rest`);
+
+    let sameDay = (sn > e);
+    details.push(`📅 ${sameDay?"Same day":"Next day"}: ${formatTime(e)} → ${formatTime(sn)}`);
+
+    // consecutive
+    let c = maxConsecutive(off);
+    let consOk = c<=6;
+
+    details.push(`${consOk?"✅":"❌"} ${c} consecutive days`);
+
+    if(!shiftOk) errors.push("Shift wrong");
+    if(!restOk) errors.push("Rest <12");
+    if(!consOk) errors.push(">6 days");
+
+    return {
+      ok: errors.length===0,
+      details,
+      name
+    };
+  }
+
+  let name1=n1.value||"Emp1";
+  let name2=n2.value||"Emp2";
+
+  let a1=analyze(1,name1);
+  let a2=analyze(2,name2);
+
+  let allOk = a1.ok && a2.ok;
+// 🎯 APPLY UI FEEDBACK
+
+// reset الألوان
+document.querySelectorAll("select,input").forEach(el=>{
+  el.classList.remove("valid","invalid");
+});
+
+// Employee 1
+if(a1.ok){
+  document.getElementById("s1").classList.add("valid");
+  document.getElementById("s1n").classList.add("valid");
+}else{
+  document.getElementById("s1").classList.add("invalid");
+  document.getElementById("s1n").classList.add("invalid");
+}
+
+// Employee 2
+if(a2.ok){
+  document.getElementById("s2").classList.add("valid");
+  document.getElementById("s2n").classList.add("valid");
+}else{
+  document.getElementById("s2").classList.add("invalid");
+  document.getElementById("s2n").classList.add("invalid");
+}
+  let out=document.getElementById("out");
+
+  out.innerHTML=`
+  <div class="result ${allOk?"ok":"bad"}">
+  
+  <h3>${allOk?"✅ Swap Approved":"❌ Swap Rejected"}</h3>
+  <p>Swap between ${name1} and ${name2}</p>
+
+  <div style="margin-top:10px">
+    <b>${name1}</b><br>
+    ${a1.details.join("<br>")}
+  </div>
+
+  <div style="margin-top:10px">
+    <b>${name2}</b><br>
+    ${a2.details.join("<br>")}
+  </div>
+
+  </div>
+  `;
+}
+// تحويل 24 → 12 ساعة
+function formatTime(h){
+  let ampm = h >= 12 ? "PM" : "AM";
+  let hour = h % 12 || 12;
+  return hour + " " + ampm;
+}
+
+// حساب النهاية تلقائي
+function autoEnd(startId, endId, ramadanId){
+  let s = document.getElementById(startId);
+  let e = document.getElementById(endId);
+  let r = document.getElementById(ramadanId);
+
+  function update(){
+    let start = +s.value;
+    let duration = r.checked ? 7 : 9;
+
+    let end = start + duration;
+    if(end >= 24) end -= 24;
+
+    e.value = end;
+
+    // عرض شكل AM PM
+    e.options[e.selectedIndex].text = formatTime(end);
+  }
+
+  s.addEventListener("change", update);
+  r.addEventListener("change", update);
+
+  update();
+}
+
+</script>
+
+</body>
+</html>
