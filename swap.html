@@ -193,6 +193,51 @@ button[onclick="resetForm()"] {
   border-color: #e74c3c;
   background: #fdecea;
 }
+
+/* NAV CONTAINER */
+.nav-buttons {
+  display:flex;
+  gap:10px;
+  margin-top:20px;
+}
+
+/* BUTTON BASE */
+.btn {
+  flex:1;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  font-size:16px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:0.3s;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+/* NEXT BUTTON */
+.btn.next {
+  background: linear-gradient(135deg,#6c5ce7,#4834d4);
+  color:white;
+  box-shadow:0 6px 15px rgba(108,92,231,0.4);
+}
+
+.btn.next:hover {
+  transform:translateY(-2px);
+  box-shadow:0 10px 20px rgba(108,92,231,0.5);
+}
+
+/* BACK BUTTON */
+.btn.back {
+  max-width:70px;
+  background:#f1f2f6;
+  color:#555;
+}
+
+.btn.back:hover {
+  background:#dfe4ea;
+}
 </style>
 </head>
 
@@ -279,11 +324,10 @@ button[onclick="resetForm()"] {
 
 </div>
 
-<div style="display:flex; gap:10px; margin-top:15px;">
-  <button onclick="prevStep()">⬅ Back</button>
-  <button onclick="nextStep()">Next ➡</button>
+<div class="nav-buttons">
+  <button class="btn back" onclick="prevStep()">⬅</button>
+  <button class="btn next" onclick="nextStep()">Next ➡</button>
 </div>
-
 <div class="step" id="step3" style="display:none;">
   <div id="out"></div>
 </div>
